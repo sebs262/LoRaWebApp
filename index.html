@@ -1,0 +1,140 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>LoRa Chat</title>
+  <meta name="theme-color" content="#071426">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' fill='%23071426'/%3E%3Cpath d='M5 19a10 10 0 0 1 0-14M19 5a10 10 0 0 1 0 14M8.5 15.5a5 5 0 0 1 0-7M15.5 8.5a5 5 0 0 1 0 7' stroke='%2355c7ff' stroke-width='1.8' stroke-linecap='round' fill='none'/%3E%3Ccircle cx='12' cy='12' r='1.6' fill='%2355c7ff'/%3E%3C/svg%3E">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M5 19a10 10 0 0 1 0-14M19 5a10 10 0 0 1 0 14M8.5 15.5a5 5 0 0 1 0-7M15.5 8.5a5 5 0 0 1 0 7"/>
+        <circle cx="12" cy="12" r="1.6"/>
+      </svg>
+      <div>
+        <h1>LoRa Chat</h1>
+        <span id="status">Desconectado</span>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <button id="btnHelp" type="button"
+        aria-expanded="false" aria-controls="helpPanel">
+         Ayuda
+      </button>
+      <button id="btnConn" type="button">Conectar</button>
+    </div>
+  </header>
+
+  <!-- Panel desplegable de ayuda -->
+  <section id="helpPanel" class="help-panel" hidden>
+    <div class="help-header">
+      <h2>Ayuda de conexión</h2>
+      <button id="btnCloseHelp" type="button"
+        aria-label="Cerrar ayuda">✕</button>
+    </div>
+
+    <p>Para conectar tu dispositivo Heltec, seguí estos pasos:</p>
+
+    <ol>
+      <li>
+        Abrí Chromium y escribí
+        <code>chrome://flags</code> en la barra de direcciones.
+      </li>
+      <li>
+        Buscá <strong>Experimental Web Platform features</strong>.
+        Activala solo si tu aplicación necesita esa función.
+      </li>
+      <li>
+        Si tu versión incluye una opción experimental para los permisos
+        de Web Bluetooth y realmente la necesitás, consultá su
+        documentación antes de cambiarla.
+      </li>
+      <li>
+        Si modificaste alguna opción, presioná
+        <strong>Relaunch</strong> para reiniciar Chromium.
+      </li>
+      <li>
+        Volvé a LoRa Chat, pulsá <strong>Conectar</strong> y elegí
+        tu dispositivo Heltec cuando aparezca la ventana del navegador.
+      </li>
+    </ol>
+
+    <p class="help-note">
+      <strong>Importante:</strong> la web debe ejecutarse desde HTTPS
+      o localhost en un navegador compatible con Web Bluetooth.
+      La página no puede cambiar automáticamente las opciones de
+      chrome://flags ni concederse permisos de Bluetooth.
+    </p>
+  </section>
+
+  <div class="dest">
+    <label for="dest">Para</label>
+    <select id="dest">
+      <option value="4294967295">Todos (canal)</option>
+    </select>
+  </div>
+
+  <main id="msgs">
+    <div class="empty">
+      <svg viewBox="0 0 120 120" aria-hidden="true">
+        <circle cx="60" cy="60" r="6"/>
+        <circle class="r" cx="60" cy="60" r="22"/>
+        <circle class="r" cx="60" cy="60" r="40"/>
+        <circle class="r" cx="60" cy="60" r="58"/>
+      </svg>
+      <p>Conecta tu Heltec para empezar a chatear</p>
+    </div>
+  </main>
+
+  <footer>
+    <div class="field">
+      <input id="txt" placeholder="Escribe un mensaje"
+        maxlength="200" autocomplete="off" disabled>
+      <span id="count">0/200</span>
+    </div>
+    <button id="btnSend" type="button" aria-label="Enviar" disabled>
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 12h15M13 6l6 6-6 6"/>
+      </svg>
+    </button>
+  </footer>
+
+  <script src="app.js"></script>
+
+  <!-- Funcionalidad del panel de ayuda -->
+  <script>
+    (() => {
+      const btnHelp = document.getElementById("btnHelp");
+      const btnCloseHelp = document.getElementById("btnCloseHelp");
+      const helpPanel = document.getElementById("helpPanel");
+
+      function toggleHelp(show) {
+        helpPanel.hidden = !show;
+        btnHelp.setAttribute("aria-expanded", String(show));
+      }
+
+      btnHelp.addEventListener("click", () => {
+        toggleHelp(helpPanel.hidden);
+      });
+
+      btnCloseHelp.addEventListener("click", () => {
+        toggleHelp(false);
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          toggleHelp(false);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
